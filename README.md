@@ -21,7 +21,7 @@ library(raster)
 library(hydroGOF)
 library(rgdal)
 
-# -------- Geostatistical Analysis in geoR ---------
+# Geostatistical Analysis in geoR 
 
 # In general, geoR offers much richer possibilities for variogram modeling 
 # than gstat.
@@ -40,13 +40,13 @@ dados$Y <- dados$Y - minY
 
 soil.attr = "sim6"  # change this argument based in dataframe colnames
 
-## --------Convert data frame to geodata object ---------
+## Convert data frame to geodata object 
 
 dadosgeo <- as.geodata(data, coords.col = c(1,2), # definir x e y
                      data.col = soil.attr) 
 
 
-# --------Experimental Variogram ---------
+# Experimental Variogram 
 
 var_exp = variog(dadosgeo, uvec=seq(0,1800,l=10)) #lags dependendo da distancia media entre os pontos
 plot(var_exp)
@@ -78,7 +78,7 @@ var_mod_gau <- likfit(geodata = dadosgeo, ini.cov.pars = ini.raw,
                  lik.method = "REML", fix.nugget = F)
 lines(var_mod_gau)
 
-# -------- CROSS VALIDATION ---------
+# CROSS VALIDATION 
 
 # sph
 valid_sph = xvalid(dadosgeo, model = var_mod_sph)
@@ -101,9 +101,9 @@ plot(valid_gau)
 summary(valid_gau)
 summary(valid_gau$predicted)
 
-#---------- Cross Validation Stats - Raw Data ---------
+# Cross Validation Stats - Raw Data 
 
-###RMSE and R2 ---------
+###RMSE and R2 
 #RMSE 
 # Spheric
 rmse_sph <- Metrics::rmse(valid_sph$data, valid_sph$predicted)

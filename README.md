@@ -1,4 +1,4 @@
-### Kriging interpolation using geoR package -----------------------------------------------
+### Kriging interpolation using geoR package
 
 #clearing memory space
 # Clear the objects from the workspace

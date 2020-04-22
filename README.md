@@ -29,10 +29,10 @@ library(rgdal)
 dados <- read.csv("6 simulaçoes (positivo/pontos_extraidos.csv", sep = ";")
 
 # change values coords 
-minX <- 50.5
+minX <- 50.5;
 minY <- 50.5
 
-dados$X <- dados$X - minX
+dados$X <- dados$X - minX;
 dados$Y <- dados$Y - minY 
 
 ## Define soil attribute

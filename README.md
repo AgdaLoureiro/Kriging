@@ -23,8 +23,7 @@ library(rgdal)
 
 # Geostatistical Analysis in geoR 
 
-# In general, geoR offers much richer possibilities for variogram modeling 
-# than gstat.
+# In general, geoR offers much richer possibilities for variogram modeling than gstat.
 
 # Import a table
 dados <- read.csv("6 simulaçoes (positivo/pontos_extraidos.csv", sep = ";")
@@ -80,21 +79,21 @@ lines(var_mod_gau)
 
 # CROSS VALIDATION 
 
-# sph
+# spherical
 valid_sph = xvalid(dadosgeo, model = var_mod_sph)
 par(mfcol = c(5,2), mar=c(3,3,.5,.5), mgp=c(1.5,.7,0))
 plot(valid_sph)
 summary(valid_sph)
 summary(valid_sph$predicted)
 
-# exp
+# exponential
 valid_exp = xvalid(dadosgeo, model = var_mod_exp)
 par(mfcol = c(5,2), mar=c(3,3,.5,.5), mgp=c(1.5,.7,0))
 plot(valid_exp)
 summary(valid_exp)
 summary(valid_exp$predicted)
 
-# gau
+# gaussian
 valid_gau = xvalid(dadosgeo, model = var_mod_gau)
 par(mfcol = c(5,2), mar=c(3,3,.5,.5), mgp=c(1.5,.7,0))
 plot(valid_gau)
@@ -105,6 +104,7 @@ summary(valid_gau$predicted)
 
 ###RMSE and R2 
 #RMSE 
+
 # Spheric
 rmse_sph <- Metrics::rmse(valid_sph$data, valid_sph$predicted)
 r2_sph = summary(lm(valid_sph$data ~ valid_sph$predicted))$r.squared  

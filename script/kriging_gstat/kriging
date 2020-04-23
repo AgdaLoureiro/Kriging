@@ -1,12 +1,18 @@
-#R - versão 3.4.4
-#Rstudio + RMarkdown
-                
-#Esta rotina utiliza o pacote gstat para as análises geoestatísticas e estão implementadas as seguintes análises:
-
-#1.Primeiros passos do R
-#2. ANÁLISE VARIOGRÁFICA: realizada pelo método dos momentos (MoM).
-#3. VALIDAÇÃO CRUZADA: leave-one-out para escolha do modelo e apresentação em 
-gráfico de correlação.
+---
+  title: "kr]"
+author: "Agda"
+date: "4/23/2020"
+output: html_document
+---
+  
+  #R - versão 3.4.4
+  #Rstudio + RMarkdown
+  
+  #Esta rotina utiliza o pacote gstat para as análises geoestatísticas e estão implementadas as seguintes análises:
+  #1.Primeiros passos do R
+  #2. ANÁLISE VARIOGRÁFICA: realizada pelo método dos momentos (MoM).
+  #3. VALIDAÇÃO CRUZADA: leave-one-out para escolha do modelo e apresentação em 
+  #gráfico de correlação.
 #4. INTERPOLAÇÃO POR KRIGAGEM: krigagem ordinária pontual e exportação de mapas.
 
 #1. Primeiros passos do R: 
@@ -28,8 +34,8 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 #Agora, para análises, vamos carregar os dados.Neste exemplo realizados análise da coluna "P" de um arquivo)
 #Dicas: cuidado para sempre trabalhar com dados já isentos de outliers
 
-dados = read.csv(file = "../dados/1amostra_ha_amostrado.csv", header = TRUE, sep = ',')
-dados<- dados[,c(1,2,3)]
+dados = read.csv(file = "Kriging/data/data points/data.csv", header = TRUE, sep = ',')
+dados<- dados[,c(2,3,4)]
 names(dados) <- c("x", "y", "z")
 sp::coordinates(dados) = ~x+y # informa os nomes das colunas com coordenadas (em UTM)
 
@@ -128,41 +134,40 @@ print(temp)
 ##4.1 Cria??o de grade para interpolar os dados
 
 Para realizar a interpola??o, vamos abrir o contorno da ?rea (formato shp "Shapefile")
-```{r}
-contorno <- shapefile("contorno/contorno.shp")
-```
+
+contorno <- shapefile("Kriging/data/boundary/cotorno.shp")
 
 Agora vamos criar uma grade, nesse contorno, para interpola??o
-```{r}
+
 r = raster(contorno, res = 5) # resolu??o do pixel 
 rp = rasterize(contorno, r, 0) # cria um objeto no formato raster
 grid = as(rp, "SpatialPixelsDataFrame") # transforma em pontos onde ser?o realizadas as interpola??es
 plot(grid)
 proj4string(dados) = proj4string(contorno) # informa que dados (csv) tem o mesmo CRS do contorno (shape)
 
-```
 
 ## 4.2 Interpola??o por krigagem ordin?ria
-```{r}
+
 mapa <- krige(solo_atr ~ 1, dados, grid, model = fit.exp)
-                                  # incluindo argumento "block" permite fazer krigagem em bloco
+# incluindo argumento "block" permite fazer krigagem em bloco
 plot(mapa)
-```
+
 
 ## 4.3 Salvar mapa interpolado
- 
-Primeiro convertemos o formato do mapa gerado para raster, adicionando proje??o no mapa 
-```{r}
+
+#Primeiro convertemos o formato do mapa gerado para raster, adicionando proje??o no mapa 
+
 # Converter para raster
 mapaRaster = raster(mapa)
 proj4string(mapaRaster) = proj4string(contorno) 
-```
+
 
 Por fim salvamos o mapa no local de nossa escolha
-```{r}
+
 # Salvar a imagem do mapa
 writeRaster(mapaRaster, 
             filename = 'nomearquivo.tif',
             format = 'GTiff',
             overwrite = T)
-```
+
+
